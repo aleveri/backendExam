@@ -23,10 +23,9 @@ namespace SB.Data
         public DbSet<User> User { get; set; }
         public DbSet<Catalog> Catalog { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)=> optionsBuilder
-                .UseLazyLoadingProxies()
-                .UseSqlServer(string.Format(Parameters.BaseConn, Singleton.Instance.DbName));
-        
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder
+                               .UseSqlServer(string.Format(Parameters.BaseConn, Singleton.Instance.DbName));
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             #region Catalog

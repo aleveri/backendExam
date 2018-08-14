@@ -42,6 +42,7 @@ namespace Solucion
             services.AddTransient<IResponseService, ResponseService>();
             services.AddTransient<IExceptionHandler, ExceptionHandler>();
             services.AddTransient<IUserEs, UserEs>();
+            services.AddTransient<ICatalogEs, CatalogEs>();
             #endregion
 
             #region Validators

@@ -22,6 +22,8 @@ namespace SB.Data
 
             context.Catalog.Add(new Catalog() { Code = "ANT", Name = "Antioquia", Type = CatalogType.Departamentos, ParentId = countryId });
 
+            context.SaveChanges();
+
             var stateId = context.Catalog.First(x => x.Code.Equals("CUD")).Id;
 
             var stateId2 = context.Catalog.First(x => x.Code.Equals("ANT")).Id;

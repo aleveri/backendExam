@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using SB.Entities;
-using System;
 using static SB.Entities.Enums;
 
 namespace Solucion
@@ -56,11 +55,6 @@ namespace Solucion
             RuleFor(x => x.CityId)
                .NotEmpty()
                .WithErrorCode(ErrorCodes.NotEmptyCity.ToString());
-
-            RuleFor(x => x.BirthDate)
-                .LessThan(new DateTime().AddYears(-100))
-                .WithErrorCode(ErrorCodes.MinimumDate.ToString());
-
         }
     }
 }
