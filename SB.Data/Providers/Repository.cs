@@ -19,10 +19,29 @@ namespace SB.Data
         public void Update(T entity) => _unitOfWork.Context.Entry(entity).State = EntityState.Modified;
 
         public async Task<T> Get(Guid id) => await _unitOfWork.Context.Set<T>().FindAsync(id);
+       
+        public async Task<IEnumerable<T>> List(Func<IQueryable<T>, IOrderedQueryable<T>> orderBy, Expression<Func<T, bool>> filter = null, int page = 1, int pageSize = 20,
+            params Expression<Func<T, object>>[] includeProperties)
+        {
+            if (page < 1) throw new ApplicationException("La pagina debe ser mayor a cero");
+            var query = AsQueryable();
+            query = PerformInclusions(includeProperties, query);
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+            query = orderBy(query);
+            query = query.Skip((page - 1) * pageSize).Take(pageSize);
+            return await query.ToListAsync();
+        }
 
-        public async Task<IEnumerable<T>> List(int page, int pageSize) => await _unitOfWork.Context.Set<T>().Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
-
-        public async Task<IEnumerable<T>> List(Expression<Func<T, bool>> predicate, int page, int pageSize) => await _unitOfWork.Context.Set<T>().Where(predicate).Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+        public async Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> where, params Expression<Func<T, object>>[] includeProperties)
+        {
+            var query = AsQueryable();
+            query = PerformInclusions(includeProperties, query);
+            var item = await query.FirstOrDefaultAsync(where);
+            return item;
+        }
 
         public async Task Delete(Guid id)
         {

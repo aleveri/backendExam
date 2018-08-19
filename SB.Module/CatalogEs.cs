@@ -2,6 +2,7 @@
 using SB.Interfaces;
 using SB.Resources;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using static SB.Entities.Enums;
 
@@ -79,7 +80,7 @@ namespace SB.Module
             try
             {
                 param = GenericUtils.ValidatePagination(param);
-                _responseService.EstablecerRespuesta(true, await _repository.List(param.Page, param.PageSize));
+                _responseService.EstablecerRespuesta(true, await _repository.List(o => o.OrderBy(x => x.Name), null, param.Page, param.PageSize, x => x.Childs));
                 _unit.Dispose();
                 return _responseService;
             }
@@ -95,7 +96,8 @@ namespace SB.Module
             try
             {
                 param = GenericUtils.ValidatePagination(param);
-                _responseService.EstablecerRespuesta(true, await _repository.List(x => x.Name.Contains(param.Criterion) ||
+                _responseService.EstablecerRespuesta(true, await _repository.List(o => o.OrderBy(x => x.Name),
+                    x => x.Name.Contains(param.Criterion) ||
                     x.Code.Contains(param.Criterion),
                     param.Page,
                     param.PageSize));
@@ -116,9 +118,11 @@ namespace SB.Module
                 param = GenericUtils.ValidatePagination(param);
                 var type = Enum.Parse<CatalogType>(param.Criterion);
                 _responseService.EstablecerRespuesta(true,
-                    await _repository.List(x => x.Type == type,
-                    param.Page,
-                    param.PageSize)
+                    await _repository.List(o => o.OrderBy(x => x.Name),
+                        x => x.Type == type,
+                        param.Page,
+                        param.PageSize,
+                        x => x.Childs)
                 );
                 _unit.Dispose();
                 return _responseService;
@@ -137,9 +141,10 @@ namespace SB.Module
                 param = GenericUtils.ValidatePagination(param);
                 var parent = Guid.Parse(param.Criterion);
                 _responseService.EstablecerRespuesta(true,
-                    await _repository.List(x => x.ParentId.Equals(parent),
-                    param.Page,
-                    param.PageSize)
+                    await _repository.List(o => o.OrderBy(x => x.Name),
+                        x => x.ParentId.Equals(parent),
+                        param.Page,
+                        param.PageSize)
                 );
                 _unit.Dispose();
                 return _responseService;

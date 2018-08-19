@@ -2,6 +2,7 @@
 using SB.Interfaces;
 using SB.Resources;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using static SB.Entities.Enums;
 
@@ -80,7 +81,7 @@ namespace SB.Module
             try
             {
                 param = GenericUtils.ValidatePagination(param);
-                _responseService.EstablecerRespuesta(true, await _repository.List(param.Page, param.PageSize));
+                _responseService.EstablecerRespuesta(true, await _repository.List(o => o.OrderBy(x => x.Name), null, param.Page, param.PageSize, x => x.Country, x => x.State, x => x.City));
                 _unit.Dispose();
                 return _responseService;
             }
@@ -96,7 +97,8 @@ namespace SB.Module
             try
             {
                 param = GenericUtils.ValidatePagination(param);
-                _responseService.EstablecerRespuesta(true, await _repository.List(x => x.Name.Contains(param.Criterion) ||
+                _responseService.EstablecerRespuesta(true, await _repository.List(o => o.OrderBy(x => x.Name),
+                    x => x.Name.Contains(param.Criterion) ||
                     x.DocumentNumber.Contains(param.Criterion),
                     param.Page, 
                     param.PageSize));

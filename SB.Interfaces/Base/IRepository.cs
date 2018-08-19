@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -9,8 +10,8 @@ namespace SB.Interfaces
     {
         Task<T> Get(Guid id);
         Task<bool> Any(Expression<Func<T, bool>> where, params Expression<Func<T, object>>[] includeProperties);
-        Task<IEnumerable<T>> List(int page, int pageSize);
-        Task<IEnumerable<T>> List(Expression<Func<T, bool>> predicate, int page, int pageSize);
+        Task<IEnumerable<T>> List(Func<IQueryable<T>, IOrderedQueryable<T>> orderBy, Expression<Func<T, bool>> filter = null, int page = 1, int pageSize = 20,
+             params Expression<Func<T, object>>[] includeProperties);
         void Add(T entity);
         Task Delete(Guid id);
         void Update(T entity);
