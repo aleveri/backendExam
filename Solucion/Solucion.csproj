@@ -9,18 +9,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="8.0.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="8.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SB.Data\SB.Data.csproj" />
+    <ProjectReference Include="..\SB.Interfaces\SB.Interfaces.csproj" />
     <ProjectReference Include="..\SB.Module\SB.Module.csproj" />
+    <ProjectReference Include="..\SB.Resources\SB.Resources.csproj" />
   </ItemGroup>
 
 </Project>
